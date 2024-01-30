@@ -1,0 +1,40 @@
+{% extends "main.html" %}
+{% block page_content %}
+{% load static %}
+<br>
+<div class="mx-0 pt-5">
+    <div class="row m-0 pb-3">
+        <h5 class="text-center">Успей сыграть! Новинки игр</h5>
+    </div>
+    <div class="row m-0 text-wrap" style="border-color: #dee2e6; border-style: solid; border-width: 1px;">
+        {% for new in news %}
+        <div class="col-md-4 col-sm-6 col-xs-12 p-0"
+             style="border-color: #dee2e6; border-style: solid; border-width: 0px 1px;">
+            <a href="{% url 'product_info' new.pk %}" class="text-decoration-none text-reset text-center">
+                <div class="row m-0 py-1 d-flex justify-content-center"
+                     style="background-color: #f5ffde; width: 100% !important; font-weight: 500;">
+                    {{ new.name }}
+                </div>
+                <div class="row m-0 font-italic">
+                    <div class="col-sm-12 col-md">
+                        &#128176; {{ new.price }} руб.
+                    </div>
+                    <div class="col d-none d-sm-flex d-flex flex-row-reverse text-secondary">
+                        Изг: {{ new.manufacturer }}
+                    </div>
+                    <div class="col d-block d-sm-none text-secondary">
+                        Изд: {{ new.manufacturer }}
+                    </div>
+                </div>
+                <div class="row m-0 d-flex justify-content-center">
+                    <img class="card-img-top py-3" src="{{ new.image }}" style="max-width:300px; max-height: 300px">
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="col mx-3 fs-6 fst-italic text-secondary pt-2">
+        <a href="/catalog/" style="color: grey !important;">&raquo; посмотреть Все игры &raquo;</a>
+    </div>
+</div>
+{% endblock %}

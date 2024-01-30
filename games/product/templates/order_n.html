@@ -1,0 +1,135 @@
+{% extends "main.html" %}
+{% block page_content %}
+{% load static %}
+
+<style type="text/css">
+    .form-control:focus {
+        border-color: #dfe0e1;
+        box-shadow: 0 0 0 0.33rem rgb(245 255 222);
+    }
+    .a-order:hover {
+        background-color: #f0ffce !important;
+    }
+    .a-order:active {
+        background-color: #fdfff7 !important;
+    }
+</style>
+
+{% if product %}
+<div class="px-3">
+    <div class="my-2 col">
+        <a href="/" class="text-decoration-none text-reset">Главная</a>&ensp;&rsaquo;&nbsp;
+        <a href="/catalog/" class="text-decoration-none text-reset">Каталог</a>&ensp;&rsaquo;&nbsp;
+        <a href="/catalog/{{ product.pk }}/" class="text-decoration-none text-reset">{{ product.name }}</a>&ensp;&rsaquo;&nbsp;
+        <span class="text-secondary">Новый заказ</span>
+    </div>
+
+    <div class="row py-3 px-5 border-top">
+        <div class="col border-bottom">
+            <div class="col fs-4 m-0 pt-3">
+                Заказ игры: <span style="font-weight: 500"> &laquo;{{ product.name }}&raquo;</span>
+            </div>
+            <div class="row py-3 px-5 border-top">
+                <div class="col border-bottom">
+                    <div class="row">
+                        <div class="col m-0 pb-4">
+                            {% if product.rating == 0.0 %}
+                            &#9734; <span class="text-secondary">(нет оценок)</span>
+                            {% else %}
+                            {% if product.rating > 0.0 and product.rating < 2 %}
+                            ⭐
+                            {% endif %}
+                            {% if product.rating >= 2 and product.rating < 3 %}
+                            ⭐⭐
+                            {% endif %}
+                            {% if product.rating >= 3 and product.rating < 4 %}
+                            ⭐⭐⭐
+                            {% endif %}
+                            {% if product.rating >= 4 and product.rating < 5 %}
+                            ⭐⭐⭐⭐
+                            {% endif %}
+                            {% if product.rating > 4 %}
+                            ⭐⭐⭐⭐⭐
+                            {% endif %}
+                            <span style="font-weight: 500">{{ product.rating }}</span>
+
+                            {% endif %}
+                        </div>
+                        <div class="col m-0 pb-4 d-flex justify-content-end">
+                            &#128176; {{ product.price }} руб.
+                        </div>
+                    </div>
+                    <div class="col m-0 py-4 d-flex justify-content-center">
+                        <img class="card-img-top" src="/{{ product.image }}" style="max-width:300px; max-height: 300px">
+                    </div>
+                </div>
+                <div class="col border-bottom d-flex justify-content-center">
+                    <div class="align-middle">
+                        <div class="col-12 m-0 py-4 fs-5">
+                            Заполните поля:
+                        </div>
+                        <form name="o_add" action="add/" method="POST">
+                            {% csrf_token %}
+                            <div class="form" style="font-size: 11pt">
+                                <div class="form-group d-flex bd-highlight my-1">
+                                    <div class="bd-highlight  align-self-center" style="min-width: 135px;">
+                                        <label for="l_name">Фамилия &bull; &ensp;</label>
+                                    </div>
+                                    <div class="bd-highlight">
+                                        <input style="font-size: 9pt" type="text" class="form-control" id="l_name"
+                                               name="l_name"></div>
+                                </div>
+                                <div class="form-group d-flex bd-highlight my-1">
+                                    <div class="bd-highlight  align-self-center" style="min-width: 135px;">
+                                        <label for="f_name">Имя &bull; &ensp;</label>
+                                    </div>
+                                    <div class="bd-highlight">
+                                        <input style="font-size: 9pt" type="text" class="form-control" id="f_name"
+                                               name="f_name"></div>
+                                </div>
+                                <div class="form-group d-flex bd-highlight my-1">
+                                    <div class="bd-highlight  align-self-center" style="min-width: 135px;">
+                                        <label for="s_name">Отчество &bull; &ensp;</label>
+                                    </div>
+                                    <div class="bd-highlight">
+                                        <input style="font-size: 9pt" type="text" class="form-control" id="s_name"
+                                               name="s_name"></div>
+                                </div>
+                                <div class="form-group d-flex bd-highlight mt-4 my-1">
+                                    <div class="bd-highlight  align-self-center" style="min-width: 135px;">
+                                        <label for="address">Адрес &bull; &ensp;</label>
+                                    </div>
+                                    <div class="bd-highlight">
+                                        <input style="font-size: 9pt" type="text" class="form-control" id="address"
+                                               name="address"></div>
+                                </div>
+                                <div class="form-group d-flex bd-highlight my-1">
+                                    <div class="bd-highlight  align-self-center" style="min-width: 135px;">
+                                        <label for="phone">Номер телефона &bull; &ensp;</label>
+                                    </div>
+                                    <div class="bd-highlight">
+                                        <input style="font-size: 9pt" type="text" class="form-control" id="phone"
+                                               name="phone"
+                                               placeholder="375*********"></div>
+                                </div>
+                                <div class="m-0 py-4 d-flex justify-content-center">
+                                    <input type="submit" value="Оформить заказ" class="btn a-order"
+                                           style="background-color: #f5ffde; border-color: #dee2e6; border-radius: 5px;">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+{{ message }}
+{% endif %}
+<!-- #fdfff7 -->
+<!-- #f5ffde -->
+
+
+{% endblock %}

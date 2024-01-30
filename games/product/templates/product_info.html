@@ -1,0 +1,163 @@
+{% extends "main.html" %}
+{% block page_content %}
+{% load static %}
+
+<style type="text/css">
+    .form-control:focus {
+        border-color: #dfe0e1;
+        box-shadow: 0 0 0 0.33rem rgb(245 255 222);
+    }
+    .a-order:hover {
+        background-color: #f0ffce !important;
+    }
+    .a-order:active {
+        background-color: #fdfff7 !important;
+    }
+</style>
+{% if product %}
+{{ rating }}
+{{ text }}
+<div class="px-3">
+    <div class="my-2 col">
+        <a href="/" class="text-decoration-none text-reset">Главная</a>&ensp;&rsaquo;&nbsp;
+        <a href="/catalog/" class="text-decoration-none text-reset">Каталог</a>&ensp;&rsaquo;&nbsp;
+        <span class="text-secondary">{{ product.name }}</span>
+    </div>
+
+    <div class="row py-3 px-5 border-top">
+        <div class="col border-bottom">
+            <div class="col fs-3 m-0 pt-3" style="font-weight: 500">
+                {{ product.name }}
+            </div>
+            <div class="col m-0 pb-4">
+                {% if product.rating == 0.0 %}
+                &#9734; <span class="text-secondary">(нет оценок)</span>
+                {% else %}
+                {% if product.rating > 0.0 and product.rating < 2 %}
+                ⭐
+                {% endif %}
+                {% if product.rating >= 2 and product.rating < 3 %}
+                ⭐⭐
+                {% endif %}
+                {% if product.rating >= 3 and product.rating < 4 %}
+                ⭐⭐⭐
+                {% endif %}
+                {% if product.rating >= 4 and product.rating < 5 %}
+                ⭐⭐⭐⭐
+                {% endif %}
+                {% if product.rating > 4 %}
+                ⭐⭐⭐⭐⭐
+                {% endif %}
+                <span style="font-weight: 500">{{ product.rating }}</span>
+
+                {% endif %}
+            </div>
+            <div class="col m-0 py-4 d-flex justify-content-center">
+                <img class="card-img-top" src="/{{ product.image }}" style="max-width:400px; max-height: 400px">
+            </div>
+        </div>
+        <div class="col border-bottom">
+            <div class="fs-5 m-0 py-3">
+                О товаре:
+            </div>
+            <div class="m-0 py-3">
+                &#128176; {{ product.price }} руб.
+            </div>
+            <div class="m-0 col">
+                <span class="fst-italic">Артикул:</span>
+                <span class="ms-1"> {{ product.article }}</span>
+            </div>
+            <div class="m-0 col">
+                <span class="fst-italic">Издатель:</span>
+                <span class="ms-1">{{ product.manufacturer }}</span>
+            </div>
+            <div class="m-0 py-4">
+                <div class="fst-italic p-0">Описание:</div>
+                {{ product.dimensions |safe }}
+            </div>
+            <div class="m-0 py-4 d-flex flex-row-reverse">
+                <a href="o/"  type="button" class="btn a-order" style="background-color: #f5ffde; border-color: #dee2e6; border-radius: 5px;">Оформить заказ</a>
+            </div>
+        </div>
+
+        <!--
+        если добавить пустой отзыв только с оценкой, он не отобразится,
+        пересчитается только рейтинг товара
+        -->
+
+        <div class="row py-2 m-0 px-0">
+            {% if product.reviews == 0 %}
+            <div class="text-secondary">Отзывы на товар отсутствуют</div>
+            {% else %}
+            <div class="mb-1 p-0" style="font-weight: 500">Отзывы на товар:</div>
+            {% for review in reviews %}
+            {% if review.text %}
+            <div class="my-2 p-1 border-top" style="background-color: #f5ffde; width: 100% !important;">
+                <div>#{{forloop.counter}} <span
+                        class="text-secondary">&bull; {{ product.datetime|date:'Y-m-d в H:i' }}</span></div>
+                <div class="p-1" style="background-color: #fdfff7; width: 100% !important;">{{ review.text }}</div>
+                <div class="p-1 pt-2" style="background-color: #fdfff7; width: 100% !important; font-size: 9pt;">
+                    {% if review.rating == 0 %}
+                    &#9734;
+                    {% endif %}
+                    {% if review.rating == 1 %}
+                    ⭐
+                    {% endif %}
+                    {% if review.rating == 2 %}
+                    ⭐⭐
+                    {% endif %}
+                    {% if review.rating == 3 %}
+                    ⭐⭐⭐
+                    {% endif %}
+                    {% if review.rating == 4 %}
+                    ⭐⭐⭐⭐
+                    {% endif %}
+                    {% if review.rating == 5 %}
+                    ⭐⭐⭐⭐⭐
+                    {% endif %}
+                    ({{ review.rating }})
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        </div>
+        <hr class="m-0 p-0 mt-4" style="color: #a5a5a5 !important;">
+        <div class="col pt-0 pb-2 m-0 px-3 border"
+             style="background-color: #fdfff7; border-color: #f0ffce !important; border-width: 15px 1px 4px 1px !important;">
+            <form name="newreview" action="newr/" method="POST">
+                {% csrf_token %}
+                <div class="col">
+                    <div class="col py-2" style="font-weight: 500">Новый отзыв:</div>
+                    <div class="col py-2">
+                        <textarea class="form-control py-3" style="font-size: 10pt; border-color: #e8f5c9;" name="text"
+                                  rows="3"></textarea>
+                    </div>
+                    <div class="col pb-2 fst-italic" style="font-size: 8pt; color: #838383">*оставляя поле отзыва пустым можно только оценить товар &#9734;</div>
+                    <div class="col d-flex justify-content-between mt-1">
+                        <span class="form-group">
+                            <span>Оценка:</span>
+                            <select class="custom-select mr-sm-2" style="font-size: 8pt" id="rating" name="rating">
+                                <option value="1">⭐</option>
+                                <option value="2">⭐⭐</option>
+                                <option value="3">⭐⭐⭐</option>
+                                <option value="4">⭐⭐⭐⭐</option>
+                                <option value="5">⭐⭐⭐⭐⭐</option>
+                            </select>
+                        </span>
+                        <input type="submit" value="Отправить" style="font-size: 10pt">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% else %}
+{{ message }}
+{% endif %}
+<!-- #fdfff7 -->
+<!-- #f5ffde -->
+
+
+{% endblock %}

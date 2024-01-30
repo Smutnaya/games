@@ -1,0 +1,53 @@
+{% extends "main.html" %}
+{% block page_content %}
+{% load static %}
+
+<style type="text/css">
+    .form-control:focus {
+        border-color: #dfe0e1;
+        box-shadow: 0 0 0 0.33rem rgb(245 255 222);
+    }
+    .a-order:hover {
+        background-color: #f0ffce !important;
+    }
+    .a-order:active {
+        background-color: #fdfff7 !important;
+    }
+</style>
+
+{% if product%}
+<div class="px-3">
+    <div class="my-2 col">
+        <a href="/" class="text-decoration-none text-reset">Главная</a>&ensp;&rsaquo;&nbsp;
+        <a href="/catalog/" class="text-decoration-none text-reset">Каталог</a>&ensp;&rsaquo;&nbsp;
+        <a href="/catalog/{{ product.pk }}/" class="text-decoration-none text-reset">{{ product.name }}</a>&ensp;&rsaquo;&nbsp;
+        <span class="text-secondary">Новый заказ &#10003;</span>
+    </div>
+    {% if order %}
+    <div class="row py-3 px-5">
+        <div class="col">
+            <div class="row py-3 px-5 border-top">
+                <div class="col"> Заказ #{{ order.pk }} оформлен. <br>Ожидайте звонка консультанта для подтверждения заказа
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col">
+        {{ message }}
+        <div>Оформите заказ заново</div>
+    </div>
+    {% endif %}
+
+
+</div>
+
+{% else %}
+{{ message }}
+{% endif %}
+<!-- #fdfff7 -->
+<!-- #f5ffde -->
+
+
+{% endblock %}
